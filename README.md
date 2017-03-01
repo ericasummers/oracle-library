@@ -25,8 +25,11 @@ _This web page allows a user to search books in a library by author, look up che
 
 |    *Behavior*   |    *Input*    |     *Output*    |
 |-----------------|---------------|-----------------|
-|
-
+|A user creates a new library account|"Portland Library"|Library object "Portland Library" created|
+|A user adds books to library account|"A Tale of Two Cities, Charles Dickens"|Book added to Library category|
+|A user adds patrons to library|"Jane Doe"|A Patron object "Jane Doe" created|
+|A patron checks out a book|Select "A Tale of Two Cities" on "Jane Doe" page|Book "A Tale of Two Cities" added to "Jane Doe" booklist and marked as "checked out"|
+|A user searches overdue books|Click "Search overdue books"|List of currently checked out books over due date|
 
 ## Known Bugs
 
