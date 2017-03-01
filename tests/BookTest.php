@@ -5,6 +5,7 @@
     */
 
     require_once "src/Book.php";
+    require_once "src/Library.php";
 
     $server = 'mysql:host=localhost:8889;dbname=oracle_test';
     $username = 'root';
@@ -17,6 +18,7 @@
         protected function tearDown()
         {
             Book::deleteAll();
+            Library::deleteAll();
         }
 
         function test_saveAndGetAll()

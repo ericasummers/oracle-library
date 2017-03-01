@@ -1,0 +1,7 @@
+Stories of success and debugging from Oracle Library system
+
+ISSUES: While testing our first object Book.php and trying to build a relational database that would optimize storage / memory by not repeating names etc ran into bugs in saving the object to all the various tables and recreating the object from the tables.  We hit A LOT of bugs.
+
+WHAT WE DID: We added echos on key inputs going in and out of the database to determine whether information was passing and being retrieved the ways we expected.  The main issue was the data coming back in a pdo object and how to best access the keys and values inside especially when the information was something simple like a name id and not an array of information.  We approached each bug one by one and isolated what was happening.
+
+OUTCOME: We refactored our code using PDO::FETCH_ASSOC to be able to cleanly reference various keys needed and passed our tests!
