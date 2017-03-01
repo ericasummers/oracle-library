@@ -3,7 +3,6 @@
     {
         private $id;
         private $name;
-        private $books;
         private $checked_out;
         private $books_available;
 
@@ -11,7 +10,6 @@
         {
             $this->name = $name;
             $this->id = $id;
-            $this->books = array();
             $this->checked_out = array();
             $this->books_available = array();
         }
@@ -24,16 +22,6 @@
         function setName($new_name)
         {
             $this->name = (string) $new_name;
-        }
-
-        function getBooks()
-        {
-            return $this->books;
-        }
-
-        function setBooks($new_books)
-        {
-            $this->book = $new_books;
         }
 
         function getCheckedOut()
@@ -95,11 +83,9 @@
         {
             $library_id = $this->getId();
             $book_id = $new_book->getId();
-            $library_books = $this->getBooks();
 
             $GLOBALS['DB']->exec("INSERT library_books (library_id, book_id) VALUES ({$library_id}, {$book_id});");
 
-            array_push($library_books, $new_book);
         }
 
         function getLibraryBooks()
@@ -110,7 +96,18 @@
                 $new_book = Book::find($book_id['book_id']);
                 array_push($library_books, $new_book);
             }
+
             return $library_books;
+        }
+
+        function delete($book_object)
+        {
+            $library_id = $this->getId();
+            $book_id = $book_object->getId();
+
+            $GLOBALS['DB']->exec("DELETE FROM library_books WHERE book_id = {$book_id};");
+
+
         }
 
 

@@ -68,8 +68,6 @@
             $this->assertEquals($new_book2, $result);
         }
 
-
-
     }
 
 ?>

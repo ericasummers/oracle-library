@@ -169,6 +169,7 @@
         {
             $GLOBALS['DB']->exec("DELETE FROM books_authors;");
             $GLOBALS['DB']->exec("DELETE FROM books_descriptions;");
+            $GLOBALS['DB']->exec("DELETE FROM library_books;");
         }
 
         static function find($search_id)
