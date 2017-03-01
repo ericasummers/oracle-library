@@ -61,7 +61,7 @@
 
         function getId()
         {
-            return $this->id = $id;
+            return $this->id;
         }
 
         function setId($id)
@@ -110,8 +110,8 @@
                 //set Book object id
                 $query = $GLOBALS['DB']->query("SELECT id FROM books_authors WHERE book_description_id = {$book_id};");
                 $rs = $query->fetchAll(PDO::FETCH_ASSOC);
-                $this->setId($rs[0]['id']);
 
+                $this->setId($rs[0]['id']);
             }
 
 
@@ -170,6 +170,51 @@
             $GLOBALS['DB']->exec("DELETE FROM books_authors;");
             $GLOBALS['DB']->exec("DELETE FROM books_descriptions;");
         }
+
+        static function find($search_id)
+        {
+            //this is the book we're looking for
+            $found_book = null;
+
+            //get the title / summary / category
+            $query_book_descriptions = $GLOBALS['DB']->query("SELECT books_descriptions.* FROM books_authors JOIN books_descriptions ON (books_descriptions.id = books_authors.book_description_id) WHERE books_authors.id = {$search_id};");
+
+            foreach ($query_book_descriptions as $book_record) {
+                $book_description_id = $book_record['id'];
+                $book_title = $book_record['title'];
+                $book_summary = $book_record['summary'];
+                $book_category = $book_record['category'];
+                //get the authors
+                $book_authors_query = $GLOBALS['DB']->query("SELECT authors_fullnames.* FROM books_authors JOIN authors_fullnames ON (authors_fullnames.id=books_authors.author_id) WHERE books_authors.book_description_id={$book_description_id};");
+
+                $book_authors = array();
+                foreach ($book_authors_query as $author) {
+                    $first_name_id = $author['first_name_id'];
+                    $last_name_id = $author['last_name_id'];
+
+
+                    $book_firstname_query = $GLOBALS['DB']->query("SELECT (first_names.first_name) FROM authors_fullnames  JOIN first_names ON (first_names.id=authors_fullnames.first_name_id) WHERE authors_fullnames.first_name_id={$first_name_id};");
+                    $rs = $book_firstname_query->fetchAll(PDO::FETCH_ASSOC);
+                    $first_name = $rs[0]['first_name'];
+
+                    $book_lastname_query = $GLOBALS['DB']->query("SELECT (last_names.last_name) FROM authors_fullnames JOIN last_names ON (last_names.id=authors_fullnames.last_name_id) WHERE authors_fullnames.last_name_id={$last_name_id};");
+                    $rs = $book_lastname_query->fetchAll(PDO::FETCH_ASSOC);
+                    $last_name = $rs[0]['last_name'];
+
+                    $full_name = $first_name . " " . $last_name;
+
+                    $book_authors[$full_name] = array('first_name' => $first_name, 'last_name' => $last_name);
+
+                }
+
+                $found_book = new Book($book_title, $book_authors, $book_summary, $book_category, $search_id);
+            }
+            return $found_book;
+        }
+
+
+
+
     }
 
 

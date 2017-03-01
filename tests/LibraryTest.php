@@ -32,7 +32,29 @@
             $this->assertEquals([$new_library], $result);
         }
 
+        function test_addAndGetBooks()
+        {
+            $name = "Portland Library";
+            $new_library = new Library($name);
+            $new_library->save();
 
+            $title = "A Tale of Two Cities";
+            $first_name = "Charles";
+            $last_name = "Dickens";
+            $full_name = $first_name . " " . $last_name;
+            $authors = array($full_name => array('first_name' => $first_name, 'last_name' => $last_name));
+            $summary = "A story about the French revolution";
+            $category = "fiction";
+
+            $new_book = new Book($title, $authors, $summary, $category);
+            $new_book->save();
+
+            $new_library->addBook($new_book);
+
+            $result = $new_library->getLibraryBooks();
+
+            $this->assertEquals([$new_book], $result);
+        }
 
 
 

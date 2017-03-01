@@ -11,6 +11,9 @@
         {
             $this->name = $name;
             $this->id = $id;
+            $this->books = array();
+            $this->checked_out = array();
+            $this->books_available = array();
         }
 
         function getName()
@@ -86,6 +89,30 @@
         {
             $GLOBALS['DB']->exec("DELETE FROM libraries;");
         }
+
+        //add book object to library_books
+        function addBook($new_book)
+        {
+            $library_id = $this->getId();
+            $book_id = $new_book->getId();
+            $library_books = $this->getBooks();
+
+            $GLOBALS['DB']->exec("INSERT library_books (library_id, book_id) VALUES ({$library_id}, {$book_id});");
+
+            array_push($library_books, $new_book);
+        }
+
+        function getLibraryBooks()
+        {
+            $books_query = $GLOBALS['DB']->query("SELECT book_id FROM library_books WHERE library_id = {$this->getId()};");
+            $library_books = array();
+            foreach($books_query as $book_id) {
+                $new_book = Book::find($book_id['book_id']);
+                array_push($library_books, $new_book);
+            }
+            return $library_books;
+        }
+
 
     }
 

@@ -39,6 +39,35 @@
             $this->assertEquals([$new_book], $result);
         }
 
+        function test_find()
+        {
+            $title = "A Tale of Two Cities";
+            $first_name = "Charles";
+            $last_name = "Dickens";
+            $full_name = $first_name . " " . $last_name;
+            $authors = array($full_name => array('first_name' => $first_name, 'last_name' => $last_name));
+            $summary = "A story about the French revolution";
+            $category = "fiction";
+
+            $new_book = new Book($title, $authors, $summary, $category);
+            $new_book->save();
+
+            $title = "A Tale of Another City";
+            $first_name = "Charles";
+            $last_name = "Dickens";
+            $full_name = $first_name . " " . $last_name;
+            $authors2 = array($full_name => array('first_name' => $first_name, 'last_name' => $last_name));
+            $summary = "A story about something";
+            $category = "fiction";
+
+            $new_book2 = new Book($title, $authors2, $summary, $category);
+            $new_book2->save();
+
+            $result = Book::find($new_book2->getId());
+
+            $this->assertEquals($new_book2, $result);
+        }
+
 
 
     }
