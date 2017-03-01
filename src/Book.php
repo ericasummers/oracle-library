@@ -64,40 +64,49 @@
             return $this->id = $id;
         }
 
+        function setId($id)
+        {
+            $this->id = $id;
+        }
+
         function save()
         {
             //insert summary and category into books_descriptions table
             $GLOBALS['DB']->exec("INSERT IGNORE INTO books_descriptions (title, summary, category) VALUES ('{$this->getTitle()}', '{$this->getSummary()}', '{$this->getCategory()}');");
 
-            $book_description_id = $GLOBALS['DB']->query("SELECT id FROM books_descriptions WHERE title = '{$this->getTitle()}';");
-            $unique_book_id = null;
-            foreach($book_description_id as $id) {
-                $unique_book_id = $id['id'];
-            }
+            $query = $GLOBALS['DB']->query("SELECT id FROM books_descriptions WHERE title = '{$this->getTitle()}';");
+            $rs = $query->fetchAll(PDO::FETCH_ASSOC);
+            $book_id = $rs[0]['id'];
+            $this->setId($book_id);
 
 
             //Parse out authors
             foreach($this->getAuthors() as $author => $value) {
 
                 $first_name = $value['first_name'];
-                echo "First Name: " . $first_name . "\n";
                 //this will add first name into table if unique
                 $GLOBALS['DB']->exec("INSERT IGNORE INTO first_names (first_name) VALUES ('{$first_name}');");
-                $first_name_id = $GLOBALS['DB']->query("SELECT id FROM first_names WHERE first_name = '{$first_name}';");
+                $query = $GLOBALS['DB']->query("SELECT id FROM first_names WHERE first_name = '{$first_name}';");
+                $rs = $query->fetchAll(PDO::FETCH_ASSOC);
+                $first_name_id = $rs[0]['id'];
 
                 $last_name = $value['last_name'];
                 //this will add last name into table if unique
                 $GLOBALS['DB']->exec("INSERT IGNORE INTO last_names (last_name) VALUES ('{$last_name}');");
-                $last_name_id = $GLOBALS['DB']->query("SELECT id FROM last_names WHERE last_name = '{$last_name}';");
+                $query = $GLOBALS['DB']->query("SELECT id FROM last_names WHERE last_name = '{$last_name}';");
+                $rs = $query->fetchAll(PDO::FETCH_ASSOC);
+                $last_name_id = $rs[0]['id'];
 
                 //insert first and last name IDs into authors_fullnames table
                 $GLOBALS['DB']->exec("INSERT IGNORE INTO authors_fullnames (first_name_id, last_name_id) VALUES ({$first_name_id}, {$last_name_id});");
 
                 //get author_id from authors_fullnames
-                $author_id = $GLOBALS['DB']->query("SELECT id FROM authors_fullnames WHERE first_name_id = {$first_name_id} AND last_name_id = {$last_name_id};");
+                $query = $GLOBALS['DB']->query("SELECT id FROM authors_fullnames WHERE first_name_id = {$first_name_id} AND last_name_id = {$last_name_id};");
+                $rs = $query->fetchAll(PDO::FETCH_ASSOC);
+                $author_id = $rs[0]['id'];
 
                 //insert book_description_id and author_id into books_authors table
-                $GLOBALS['DB']->exec("INSERT IGNORE INTO books_authors (book_description_id, author_id) VALUES ({$unique_book_id}, {$author_id});");
+                $GLOBALS['DB']->exec("INSERT IGNORE INTO books_authors (book_description_id, author_id) VALUES ({$book_id}, {$author_id});");
 
             }
 
@@ -117,18 +126,42 @@
                 $book_summary = $book_record['summary'];
                 $book_category = $book_record['category'];
                 //get the authors
-                $book_authors_query = $GLOBALS['DB']->query("SELECT (first_names.first_name, last_names.lastname) FROM books_authors JOIN authors_fullnames ON (authors_fullnames.id=books_authors.author_id) JOIN first_names ON (first_names.id=authors_fullnames.first_name_id) JOIN last_names ON (last_names.id=authors_fullnames.last_name_id) WHERE books_authors.book_description_id={$book_description_id};");
+                $book_authors_query = $GLOBALS['DB']->query("SELECT authors_fullnames.* FROM books_authors JOIN authors_fullnames ON (authors_fullnames.id=books_authors.author_id) WHERE books_authors.book_description_id={$book_description_id};");
+
+                echo "query is: " . var_dump($book_authors_query);
                 $book_authors = array();
                 foreach ($book_authors_query as $author) {
-                    $first_name = $author['first_name'];
-                    $last_name = $author['last_name'];
+                    $first_name_id = $author['first_name_id'];
+                    $last_name_id = $author['last_name_id'];
+
+
+                    $book_firstname_query = $GLOBALS['DB']->query("SELECT (first_names.first_name) FROM authors_fullnames  JOIN first_names ON (first_names.id=authors_fullnames.first_name_id) WHERE authors_fullnames.first_name_id={$first_name_id};");
+                    $rs = $book_firstname_query->fetchAll(PDO::FETCH_ASSOC);
+                    $first_name = $rs[0]['first_name'];
+
+                    $book_lastname_query = $GLOBALS['DB']->query("SELECT (last_names.last_name) FROM authors_fullnames JOIN last_names ON (last_names.id=authors_fullnames.last_name_id) WHERE authors_fullnames.last_name_id={$last_name_id};");
+                    $rs = $book_lastname_query->fetchAll(PDO::FETCH_ASSOC);
+                    $last_name = $rs[0]['last_name'];
+
                     $full_name = $first_name . " " . $last_name;
-                    $name_array = array($full_name => array('first_name' => $first_name, 'last_name' => $last_name));
-                    array_push($book_authors, $name_array);
+
+                    echo "FULL NAME: " . $full_name;
+                    // $name_array = array($full_name => array('first_name' => $first_name, 'last_name' => $last_name));
+
+
+                    $book_authors[$full_name] = array('first_name' => $first_name, 'last_name' => $last_name);
+
+                    
+                    var_dump($book_authors);
                 }
-                $book_id = $GLOBALS['DB']->query("SELECT id FROM books_authors WHERE book_description_id = {$book_description_id};");
-                $new_book = new Book($book_title, $book_authors, $book_summary, $book_category, $book_id[0]);
-                array($all_books, $new_book);
+
+                //grab first id for book in books_authors
+                $query = $GLOBALS['DB']->query("SELECT id FROM books_authors WHERE book_description_id = {$book_description_id};");
+                $rs = $query->fetchAll(PDO::FETCH_ASSOC);
+                $book_id = $rs[0]['id'];
+
+                $new_book = new Book($book_title, $book_authors, $book_summary, $book_category, $book_id);
+                array_push($all_books, $new_book);
             }
             return $all_books;
 

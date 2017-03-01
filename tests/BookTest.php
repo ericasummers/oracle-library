@@ -14,10 +14,10 @@
     class BookTest extends PHPUnit_Framework_TestCase
     {
 
-        // protected function tearDown()
-        // {
-        //     Book::deleteAll();
-        // }
+        protected function tearDown()
+        {
+            Book::deleteAll();
+        }
 
         function test_saveAndGetAll()
         {
