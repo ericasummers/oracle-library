@@ -77,7 +77,6 @@
             $query = $GLOBALS['DB']->query("SELECT id FROM books_descriptions WHERE title = '{$this->getTitle()}';");
             $rs = $query->fetchAll(PDO::FETCH_ASSOC);
             $book_id = $rs[0]['id'];
-            $this->setId($book_id);
 
 
             //Parse out authors
@@ -108,6 +107,11 @@
                 //insert book_description_id and author_id into books_authors table
                 $GLOBALS['DB']->exec("INSERT IGNORE INTO books_authors (book_description_id, author_id) VALUES ({$book_id}, {$author_id});");
 
+                //set Book object id
+                $query = $GLOBALS['DB']->query("SELECT id FROM books_authors WHERE book_description_id = {$book_id};");
+                $rs = $query->fetchAll(PDO::FETCH_ASSOC);
+                $this->setId($rs[0]['id']);
+
             }
 
 
@@ -128,7 +132,6 @@
                 //get the authors
                 $book_authors_query = $GLOBALS['DB']->query("SELECT authors_fullnames.* FROM books_authors JOIN authors_fullnames ON (authors_fullnames.id=books_authors.author_id) WHERE books_authors.book_description_id={$book_description_id};");
 
-                echo "query is: " . var_dump($book_authors_query);
                 $book_authors = array();
                 foreach ($book_authors_query as $author) {
                     $first_name_id = $author['first_name_id'];
@@ -145,14 +148,8 @@
 
                     $full_name = $first_name . " " . $last_name;
 
-                    echo "FULL NAME: " . $full_name;
-                    // $name_array = array($full_name => array('first_name' => $first_name, 'last_name' => $last_name));
-
-
                     $book_authors[$full_name] = array('first_name' => $first_name, 'last_name' => $last_name);
 
-                    
-                    var_dump($book_authors);
                 }
 
                 //grab first id for book in books_authors
