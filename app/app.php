@@ -42,9 +42,19 @@
         return $app['twig']->render('library.html.twig', array('patrons'=>$new_library->getLibraryPatrons(), 'books'=>$new_library->getLibraryBooks(), 'library' => $new_library, 'libraries'=>Library::getAll()));
     });
 
-    $app->get("/books/{id}", function($id) use ($app){
+    $app->post("/add_patron", function() use ($app){
+        $patron_first_name = $_POST['first_name'];
+        $patron_last_name = $_POST['last_name'];
+        $new_patron = new Patron($patron_first_name, $patron_last_name);
+        $new_patron->save();
 
+        $new_library = Library::find($_POST['library_id']);
+        $new_library->addPatron($new_patron);
+
+        return $app['twig']->render('library.html.twig', array('library'=>$new_library, 'books'=>$new_library->getLibraryBooks(), 'patrons'=>$new_library->getLibraryPatrons(), 'libraries'=>Library::getAll()));
     });
+
+
 
 
 
