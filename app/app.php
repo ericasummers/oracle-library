@@ -70,6 +70,13 @@
         return $app['twig']->render('library.html.twig', array('library'=>$new_library, 'books'=>$new_library->getLibraryBooks(), 'patrons'=>$new_library->getLibraryPatrons(), 'libraries'=>Library::getAll()));
     });
 
+    $app->get("/patrons/{library_id}/{id}", function($library_id, $id) use ($app){
+        $new_patron = Patron::find($id);
+        $new_library = Library::find($library_id);
+
+        return $app['twig']->render('patron.html.twig', array('patron' => $new_patron, 'books'=>$new_patron->getCheckedoutBooks($new_library), 'library'=>$new_library, 'libraries'=>Library::getAll()));
+    });
+
 
 
 

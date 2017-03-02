@@ -2,10 +2,10 @@
 
 {% block leftblock %}
 
-    <h3>Patron</h3>
-    <p>
-        patron details
-    </p>
+    <h3>{{library.getName}}</h3>
+    <h2>
+        {{patron.getFirstName}}
+    </h2>
 
 
 {% endblock %}
@@ -18,10 +18,12 @@
 
 {% block rightblock %}
 
-    <h3>list of their books</h3>
+    <h3>list of books checked out</h3>
 
-    <p>
-        return book button
-    </p>
+    {% for book in books %}
+        <p>
+            {{book.getTitle}}
+        </p>
+    {% endfor %}
 
 {% endblock %}

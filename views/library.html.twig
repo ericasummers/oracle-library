@@ -7,7 +7,7 @@
     <h2>Patrons</h2>
     {% if patrons is not empty %}
         {% for patron in patrons %}
-            <h4><a href="/patrons/{{ patron.getId }}">{{ patron.getFirstName }} {{ patron.getLastName }} </a></h4>
+            <h4><a href="/patrons/{{library.getId}}/{{ patron.getId }}">{{ patron.getFirstName }} {{ patron.getLastName }} </a></h4>
         {% endfor %}
     {% else %}
         <h4>There are no patrons for this library.</h4>
