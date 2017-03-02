@@ -11,7 +11,7 @@
 
     {% for book in book_details %}
     <p>
-        {{book.new_book.getTitle}} Checked Out: {{book.checkout_date}} Due: {{book.due_date}}
+        <a href="/{{ library.getId }}/books/{{ book.new_book.getId }}">{{book.new_book.getTitle}}</a> Checked Out: {{book.checkout_date}} Due: {{book.due_date}}
         <form action="/return-book/{{ book.new_book.getId }}" method="post" style="display: inline">
             <input type="hidden" name="patron_id" value="{{ patron.getId }}">
             <input type="hidden" name="library_id" value="{{ library.getId }}">
