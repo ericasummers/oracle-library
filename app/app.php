@@ -97,11 +97,12 @@
         return $app['twig']->render('patron.html.twig', array('patron' => $new_patron, 'book_details'=>$new_patron->getCheckedoutBooks($new_library), 'library'=>$new_library, 'libraries'=>Library::getAll(), 'all_books' => $new_library->getLibraryBooksAvailable()));
     });
 
+    $app->get("/{library_id}/books/{id}", function($library_id, $id) use ($app) {
+        $book = Book::find($id);
+        $library = Library::find($library_id);
 
-
-
-
-
+        return $app['twig']->render('book.html.twig', array('book' => $book, 'library' => $library, 'libraries'=>Library::getAll()));
+    });
 
 
 

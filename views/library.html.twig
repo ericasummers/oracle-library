@@ -66,7 +66,7 @@
 
     {% if books is not empty %}
         {% for book in books %}
-            <h4><a href="/books/{{ book.getId }}">{{ book.getTitle }}</a></h4>
+            <h4><a href="/{{ library.getId }}/books/{{ book.getId }}">{{ book.getTitle }}</a></h4>
         {% endfor %}
     {% else %}
         <h4>There are no books in the library.</h4>

@@ -1,0 +1,27 @@
+{% extends "library_template.html.twig" %}
+
+{% block leftblock %}
+
+    <h3>{{library.getName}}</h3>
+    <h2>
+        {{book.getTitle}}
+    </h2>
+    {% for author in book.getAuthors %}
+    <p>{{ author.first_name }} {{ author.last_name }}</p>
+    {% endfor %}
+    <p>{{ book.getSummary }}</p>
+    <p>{{ book.getCategory }}</p>
+
+    <a href="/libraries/{{ library.getId }}">Return to Library</a>
+
+
+{% endblock %}
+
+{% block middleform %}
+
+{% endblock %}
+
+{% block rightblock %}
+
+
+{% endblock %}

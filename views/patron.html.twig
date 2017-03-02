@@ -31,7 +31,7 @@
     {% if all_books is not empty %}
     <ul>
         {% for book in all_books %}
-        <li><a href="/book/{{ book.getId }}">{{ book.getTitle }}</a>
+        <li><a href="/{{ library.getId }}/books/{{ book.getId }}">{{ book.getTitle }}</a>
         <form action="/checkout-book/{{ book.getId }}" method="post" style="display: inline">
             <input type="hidden" name="patron_id" value="{{ patron.getId }}">
             <input type="hidden" name="library_id" value="{{ library.getId }}">
@@ -41,5 +41,12 @@
         {% endfor %}
     </ul>
     {% endif %}
+
+    <h3>Overdue Books:</h3>
+    {% for book in book_details %}
+        {% if book.due_date < date() %}
+        <p>{{ book.new_book.getTitle }}</p>
+        {% endif %}
+    {% endfor %}
 
 {% endblock %}
