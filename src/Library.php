@@ -180,7 +180,7 @@
         function getOverdueBooks()
         {
             $overdue_titles = array();
-            $query = $GLOBALS['DB']->query("SELECT books_descriptions.title FROM library_books JOIN books_authors ON (books_authors.id = library_books.book_id) JOIN books_descriptions ON (books_descriptions.id = books_authors.id) WHERE due_date <= CURRENT_DATE - INTERVAL 1 DAY;");
+            $query = $GLOBALS['DB']->query("SELECT books_descriptions.title FROM library_books JOIN books_authors ON (books_authors.id = library_books.book_id) JOIN books_descriptions ON (books_descriptions.id = books_authors.book_description_id) WHERE library_books.due_date < NOW();");
             foreach($query as $book_title) {
                 $title = $book_title['title'];
                 array_push($overdue_titles, $title);
