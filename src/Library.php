@@ -102,12 +102,30 @@
 
         function deleteBook($book_object)
         {
-            $library_id = $this->getId();
-            $book_id = $book_object->getId();
-
-            $GLOBALS['DB']->exec("DELETE FROM library_books WHERE book_id = {$book_id};");
+            $GLOBALS['DB']->exec("DELETE FROM library_books WHERE book_id = {$book_object->getId()};");
 
 
+        }
+
+        function addPatron($new_patron)
+        {
+            $GLOBALS['DB']->exec("INSERT INTO libraries_patrons (library_id, patron_id) VALUES ({$this->getId()}, {$new_patron->getId()});");
+
+        }
+
+        function getLibraryPatrons()
+        {
+            //get list of patron ids by library
+            $returned_patron_ids = $GLOBALS['DB']->query("SELECT patron_id FROM libraries_patrons WHERE library_id = {$this->getId()};");
+
+            $library_patrons = array();
+            foreach($returned_patron_ids as $id) {
+                $patron_id = $id['patron_id'];
+                echo "ID EQUALS: " . $patron_id;
+                $new_patron = Patron::find($patron_id);
+                array_push($library_patrons, $new_patron);
+            }
+            return $library_patrons;
         }
 
 
