@@ -100,7 +100,7 @@
             return $library_books;
         }
 
-        function delete($book_object)
+        function deleteBook($book_object)
         {
             $library_id = $this->getId();
             $book_id = $book_object->getId();

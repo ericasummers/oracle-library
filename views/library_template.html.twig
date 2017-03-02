@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/yeti/bootstrap.min.css" rel="stylesheet" integrity="sha384-HzUaiJdCTIY/RL2vDPRGdEQHHahjzwoJJzGUkYjHVzTwXFQ2QN/nVgX7tzoMW3Ov" crossorigin="anonymous">
+        <link href="styles.css" rel="stylesheet" type="text/css">
+        <title>Oracle Library Database</title>
+    </head>
+    <body>
+        <div class="container">
+            <nav class="navbar navbar-inverse">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="/">Oracle</a>
+                    </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/addBook">Add a Book</a></li>
+                        <li><a href="/addPatron">Add a Patron</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+
+            <h1><a href="/">Welcome to the Oracle Library Database</a></h1>
+
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="panel">
+                        <div class="panel-body">
+                            {% block leftblock %}
+                                <h2>Test</h2>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="panel">
+                        <div class="panel-body">
+                            {% block rightblock %}
+                            <h2>Another Test</h2>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

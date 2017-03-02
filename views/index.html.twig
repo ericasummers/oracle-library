@@ -1,0 +1,31 @@
+{% extends "library_template.html.twig" %}
+
+{% block leftblock %}
+
+    <h3>Libraries in the Oracle System</h3>
+
+    {% if libraries is not empty %}
+        {% for library in libraries %}
+            <h4><a href="/libraries/{{ library.getId }}">{{ library.getName }}</a></h4>
+        {% endfor %}
+    {% else %}
+        <h4>There are no libraries in the system.</h4>
+    {% endif %}
+
+{% endblock %}
+
+{% block rightblock %}
+
+    <h3>Books in the Oracle System</h3>
+
+    {% if books is not empty %}
+{% for book in books %}
+<h4><a href="/books/{{ book.getId }}">{{ book.getTitle }}</a></h4>
+{% endfor %}
+{% else %}
+<h4>There are no books in the system.</h4>
+{% endif %}
+
+
+
+{% endblock %}

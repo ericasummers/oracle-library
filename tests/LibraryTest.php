@@ -85,7 +85,7 @@
             $new_library->addBook($new_book);
             $new_library->addBook($new_book2);
 
-            $new_library->delete($new_book2);
+            $new_library->deleteBook($new_book2);
             $result = $new_library->getLibraryBooks();
 
             $this->assertEquals([$new_book], $result);
