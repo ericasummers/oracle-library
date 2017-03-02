@@ -33,6 +33,18 @@
 
     });
 
+    $app->post("/add_library", function() use ($app){
+
+    });
+
+    $app->get("/libraries/{id}", function($id) use ($app){
+
+    });
+
+    $app->get("/books/{id}", function($id) use ($app){
+
+    });
+
 
 
 
