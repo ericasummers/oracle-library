@@ -9,10 +9,10 @@
 
     <h3>list of books checked out</h3>
 
-    {% for book in books %}
+    {% for book in book_details %}
     <p>
-        {{book.getTitle}}
-        <form action="/return-book/{{ book.getId }}" method="post" style="display: inline">
+        {{book.new_book.getTitle}} Checked Out: {{book.checkout_date}} Due: {{book.due_date}}
+        <form action="/return-book/{{ book.new_book.getId }}" method="post" style="display: inline">
             <input type="hidden" name="patron_id" value="{{ patron.getId }}">
             <input type="hidden" name="library_id" value="{{ library.getId }}">
             <button type="submit" class="btn btn-success">Return Book</button>

@@ -109,11 +109,14 @@
         function getCheckedoutBooks($library)
         {
             $patron_books = array();
-            $query = $GLOBALS['DB']->query("SELECT book_id FROM library_books WHERE checkout_patron_id = {$this->getId()} AND library_id = {$library->getId()};");
-            foreach($query as $book_id) {
-                $id = $book_id['book_id'];
+            $query = $GLOBALS['DB']->query("SELECT book_id, checkout_date, due_date FROM library_books WHERE checkout_patron_id = {$this->getId()} AND library_id = {$library->getId()};");
+            foreach($query as $book_info) {
+                $id = $book_info['book_id'];
+                $due_date = $book_info['due_date'];
+                $checkout_date = $book_info['checkout_date'];
                 $new_book = Book::find($id);
-                array_push($patron_books, $new_book);
+                array_push($patron_books, array('new_book'=>$new_book, 'due_date'=>$due_date, 'checkout_date'=>$checkout_date));
+
             }
             return $patron_books;
         }
