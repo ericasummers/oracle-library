@@ -6,8 +6,6 @@
         private $authors;
         private $summary;
         private $category;
-        //private $due_date;
-        //private $patrons;
 
         //Title: string, Authors: array, Summary: string, Category: string, Id: integer
         function __construct($title, $authors, $summary, $category, $id = null)

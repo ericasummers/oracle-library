@@ -3,15 +3,11 @@
     {
         private $id;
         private $name;
-        private $checked_out;
-        private $books_available;
 
         function __construct($name, $id = null)
         {
             $this->name = $name;
             $this->id = $id;
-            $this->checked_out = array();
-            $this->books_available = array();
         }
 
         function getName()
