@@ -7,23 +7,39 @@
         {{patron.getFirstName}}
     </h2>
 
+    <h3>list of books checked out</h3>
+
+    {% for book in books %}
+    <p>
+        {{book.getTitle}}
+        <form action="/return-book/{{ book.getId }}" method="post" style="display: inline">
+            <input type="hidden" name="patron_id" value="{{ patron.getId }}">
+            <input type="hidden" name="library_id" value="{{ library.getId }}">
+            <button type="submit" class="btn btn-success">Return Book</button>
+        </form>
+    </p>
+    {% endfor %}
 
 {% endblock %}
 
 {% block middleform %}
-    <p>
-        checkout book
-    </p>
+
 {% endblock %}
 
 {% block rightblock %}
 
-    <h3>list of books checked out</h3>
-
-    {% for book in books %}
-        <p>
-            {{book.getTitle}}
-        </p>
-    {% endfor %}
+    {% if all_books is not empty %}
+    <ul>
+        {% for book in all_books %}
+        <li><a href="/book/{{ book.getId }}">{{ book.getTitle }}</a>
+        <form action="/checkout-book/{{ book.getId }}" method="post" style="display: inline">
+            <input type="hidden" name="patron_id" value="{{ patron.getId }}">
+            <input type="hidden" name="library_id" value="{{ library.getId }}">
+            <button type="submit" class="btn btn-info">Checkout!</button>
+        </form>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 
 {% endblock %}

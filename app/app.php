@@ -74,7 +74,27 @@
         $new_patron = Patron::find($id);
         $new_library = Library::find($library_id);
 
-        return $app['twig']->render('patron.html.twig', array('patron' => $new_patron, 'books'=>$new_patron->getCheckedoutBooks($new_library), 'library'=>$new_library, 'libraries'=>Library::getAll()));
+        return $app['twig']->render('patron.html.twig', array('patron' => $new_patron, 'books'=>$new_patron->getCheckedoutBooks($new_library), 'library'=>$new_library, 'libraries'=>Library::getAll(), 'all_books' => $new_library->getLibraryBooksAvailable()));
+    });
+
+    $app->post("/checkout-book/{id}", function($id) use ($app){
+        $book = Book::find($id);
+        $new_patron = Patron::find($_POST['patron_id']);
+        $new_library = Library::find($_POST['library_id']);
+
+        $new_library->checkout($book, $new_patron);
+
+        return $app['twig']->render('patron.html.twig', array('patron' => $new_patron, 'books'=>$new_patron->getCheckedoutBooks($new_library), 'library'=>$new_library, 'libraries'=>Library::getAll(), 'all_books' => $new_library->getLibraryBooksAvailable()));
+    });
+
+    $app->post("/return-book/{id}", function($id) use ($app){
+        $book = Book::find($id);
+        $new_patron = Patron::find($_POST['patron_id']);
+        $new_library = Library::find($_POST['library_id']);
+
+        $new_library->returnBook($book, $new_patron);
+
+        return $app['twig']->render('patron.html.twig', array('patron' => $new_patron, 'books'=>$new_patron->getCheckedoutBooks($new_library), 'library'=>$new_library, 'libraries'=>Library::getAll(), 'all_books' => $new_library->getLibraryBooksAvailable()));
     });
 
 

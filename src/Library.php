@@ -99,6 +99,18 @@
             return $library_books;
         }
 
+        function getLibraryBooksAvailable()
+        {
+            $books_query = $GLOBALS['DB']->query("SELECT book_id FROM library_books WHERE library_id = {$this->getId()} AND status IS null;");
+            $library_books = array();
+            foreach($books_query as $book_id) {
+                $new_book = Book::find($book_id['book_id']);
+                array_push($library_books, $new_book);
+            }
+
+            return $library_books;
+        }
+
         function deleteBook($book_object)
         {
             $GLOBALS['DB']->exec("DELETE FROM library_books WHERE book_id = {$book_object->getId()};");
