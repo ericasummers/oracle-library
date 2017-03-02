@@ -96,18 +96,32 @@
                 array_push($library_books, $new_book);
             }
 
+            function cmp($a, $b)
+            {
+                return strcmp($a->getTitle(), $b->getTitle());
+            }
+
+            usort($library_books, "cmp");
+
             return $library_books;
         }
 
         function getLibraryBooksAvailable()
         {
+
+
             $books_query = $GLOBALS['DB']->query("SELECT book_id FROM library_books WHERE library_id = {$this->getId()} AND status IS null;");
             $library_books = array();
             foreach($books_query as $book_id) {
                 $new_book = Book::find($book_id['book_id']);
                 array_push($library_books, $new_book);
             }
+            function cmp($a, $b)
+            {
+                return strcmp($a->getTitle(), $b->getTitle());
+            }
 
+            usort($library_books, "cmp");
             return $library_books;
         }
 
