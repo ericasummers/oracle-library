@@ -32,6 +32,7 @@
 
     <form action="/add_book" method="post">
         <div class="form-group">
+            <input type="hidden" name="library_id" value="{{library.getId}}">
             <label for="title">Title:</label>
             <input type="text" name="title" placeholder="Treasure Island">
             <label for="author_first_name">Author First Name:</label>

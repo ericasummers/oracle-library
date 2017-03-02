@@ -26,8 +26,6 @@
         return $app['twig']->render('library.html.twig', array('patrons'=>$new_library->getLibraryPatrons(), 'books'=>$new_library->getLibraryBooks(), 'library' => $new_library, 'libraries'=>Library::getAll()));
     });
 
-
-
     $app->post("/add_library", function() use ($app){
         $library_name = $_POST['name'];
         $new_library = new Library($library_name);
@@ -50,6 +48,24 @@
 
         $new_library = Library::find($_POST['library_id']);
         $new_library->addPatron($new_patron);
+
+        return $app['twig']->render('library.html.twig', array('library'=>$new_library, 'books'=>$new_library->getLibraryBooks(), 'patrons'=>$new_library->getLibraryPatrons(), 'libraries'=>Library::getAll()));
+    });
+
+    $app->post("/add_book", function() use ($app){
+        $title = $_POST['title'];
+        $first_name = $_POST['author_first_name'];
+        $last_name = $_POST['author_last_name'];
+        $full_name = $first_name . " " . $last_name;
+        $authors = array($full_name => array('first_name' => $first_name, 'last_name' => $last_name));
+        $summary = $_POST['summary'];
+        $category = $_POST['categories'];
+
+        $new_book = new Book($title, $authors, $summary, $category);
+        $new_book->save();
+
+        $new_library = Library::find($_POST['library_id']);
+        $new_library->addBook($new_book);
 
         return $app['twig']->render('library.html.twig', array('library'=>$new_library, 'books'=>$new_library->getLibraryBooks(), 'patrons'=>$new_library->getLibraryPatrons(), 'libraries'=>Library::getAll()));
     });
