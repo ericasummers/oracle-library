@@ -19,6 +19,7 @@
         </form>
     </p>
     {% endfor %}
+    <a href="/libraries/{{ library.getId }}">Return to Library</a>
 
 {% endblock %}
 
@@ -44,7 +45,7 @@
 
     <h3>Overdue Books:</h3>
     {% for book in book_details %}
-        {% if book.due_date < date() %}
+        {% if date(book.due_date) < date('-1days') %}
         <p>{{ book.new_book.getTitle }}</p>
         {% endif %}
     {% endfor %}
