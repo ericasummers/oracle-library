@@ -106,6 +106,18 @@
             $GLOBALS['DB']->exec("DELETE FROM patrons WHERE id = {$this->getId()};");
         }
 
+        function getCheckedoutBooks($library)
+        {
+            $patron_books = array();
+            $query = $GLOBALS['DB']->query("SELECT book_id FROM library_books WHERE checkout_patron_id = {$this->getId()} AND library_id = {$library->getId()};");
+            foreach($query as $book_id) {
+                $id = $book_id['book_id'];
+                $new_book = Book::find($id);
+                array_push($patron_books, $new_book);
+            }
+            return $patron_books;
+        }
+
 
     }
 

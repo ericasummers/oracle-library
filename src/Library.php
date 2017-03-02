@@ -57,7 +57,10 @@
         function save()
         {
             $GLOBALS['DB']->exec("INSERT INTO libraries (name) VALUES ('{$this->getName()}');");
-            $this->id = $GLOBALS['DB']->lastInsertId();
+
+            $query = $GLOBALS['DB']->query("SELECT id FROM libraries WHERE name = '{$this->getName()}';");
+            $rs = $query->fetchAll(PDO::FETCH_ASSOC);
+            $this->id = $rs[0]['id'];
         }
 
         static function getAll()
@@ -128,6 +131,16 @@
         function deletePatron($patron)
         {
             $GLOBALS['DB']->exec("DELETE FROM libraries_patrons WHERE patron_id = {$patron->getId()};");
+        }
+
+        function checkout($book, $patron)
+        {
+            $GLOBALS['DB']->exec("UPDATE library_books SET status ='out', checkout_patron_id = {$patron->getId()}, checkout_date = NOW(), due_date = NOW() + INTERVAL 10 DAY WHERE book_id = {$book->getId()} AND library_id = {$this->getId()} LIMIT 1;");
+        }
+
+        function returnBook($book, $patron)
+        {
+            $GLOBALS['DB']->exec("UPDATE library_books SET status =null, checkout_patron_id = null, checkout_date = null, due_date = null WHERE book_id = {$book->getId()} AND checkout_patron_id = {$patron->getId()} AND library_id = {$this->getId()} LIMIT 1;");
         }
 
 

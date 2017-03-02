@@ -117,7 +117,7 @@
             $this->assertEquals([$new_patron, $new_patron2], $result);
         }
 
-        function test_deletPatron()
+        function test_deletePatron()
         {
             $name = "Portland Library";
             $new_library = new Library($name);
@@ -140,6 +140,102 @@
             $result = $new_library->getLibraryPatrons();
 
             $this->assertEquals([$new_patron2], $result);
+        }
+
+        function test_checkoutBooks()
+        {
+            $name = "Portland Library";
+            $new_library = new Library($name);
+            $new_library->save();
+
+            $first_name = "Bob";
+            $last_name = "Smith";
+            $new_patron = new Patron($first_name, $last_name);
+            $new_patron->save();
+
+            $first_name = "Jane";
+            $last_name = "Doe";
+            $new_patron2 = new Patron($first_name, $last_name);
+            $new_patron2->save();
+
+            $new_library->addPatron($new_patron);
+            $new_library->addPatron($new_patron2);
+
+            $title = "A Tale of Two Cities";
+            $first_name = "Charles";
+            $last_name = "Dickens";
+            $full_name = $first_name . " " . $last_name;
+            $authors = array($full_name => array('first_name' => $first_name, 'last_name' => $last_name));
+            $summary = "A story about the French revolution";
+            $category = "fiction";
+
+            $new_book = new Book($title, $authors, $summary, $category);
+            $new_book->save();
+
+            $title = "A Tale of Another City";
+            $first_name = "Charles";
+            $last_name = "Dickens";
+            $full_name = $first_name . " " . $last_name;
+            $authors2 = array($full_name => array('first_name' => $first_name, 'last_name' => $last_name));
+            $summary = "A story about something";
+            $category = "fiction";
+
+            $new_book2 = new Book($title, $authors2, $summary, $category);
+            $new_book2->save();
+
+            $new_library->addBook($new_book);
+            $new_library->addBook($new_book2);
+
+            $new_library->checkout($new_book, $new_patron2);
+            $result = $new_patron2->getCheckedoutBooks($new_library);
+
+            $this->assertEquals([$new_book], $result);
+        }
+
+        function test_returnBook()
+        {
+            $name = "Portland Library";
+            $new_library = new Library($name);
+            $new_library->save();
+
+            $first_name = "Bob";
+            $last_name = "Smith";
+            $new_patron = new Patron($first_name, $last_name);
+            $new_patron->save();
+
+            $new_library->addPatron($new_patron);
+
+            $title = "A Tale of Two Cities";
+            $first_name = "Charles";
+            $last_name = "Dickens";
+            $full_name = $first_name . " " . $last_name;
+            $authors = array($full_name => array('first_name' => $first_name, 'last_name' => $last_name));
+            $summary = "A story about the French revolution";
+            $category = "fiction";
+            $new_book = new Book($title, $authors, $summary, $category);
+            $new_book->save();
+
+            $title = "A Tale of Another City";
+            $first_name = "Charles";
+            $last_name = "Dickens";
+            $full_name = $first_name . " " . $last_name;
+            $authors2 = array($full_name => array('first_name' => $first_name, 'last_name' => $last_name));
+            $summary = "A story about something";
+            $category = "fiction";
+            $new_book2 = new Book($title, $authors2, $summary, $category);
+            $new_book2->save();
+
+            $new_library->addBook($new_book);
+            $new_library->addBook($new_book2);
+
+            $new_library->checkout($new_book, $new_patron);
+            $new_library->checkout($new_book2, $new_patron);
+
+            $new_library->returnBook($new_book2, $new_patron);
+
+            $result = $new_patron->getCheckedoutBooks($new_library);
+
+            $this->assertEquals([$new_book], $result);
         }
 
 
