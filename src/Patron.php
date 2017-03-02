@@ -101,6 +101,11 @@
             return $new_patron = new Patron($first_name, $last_name, $search_id);
         }
 
+        function delete()
+        {
+            $GLOBALS['DB']->exec("DELETE FROM patrons WHERE id = {$this->getId()};");
+        }
+
 
     }
 

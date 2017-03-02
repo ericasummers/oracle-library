@@ -53,7 +53,23 @@
             $this->assertEquals($new_patron2, $result);
         }
 
+        function test_delete()
+        {
+            $first_name = "Bob";
+            $last_name = "Smith";
+            $new_patron = new Patron($first_name, $last_name);
+            $new_patron->save();
 
+            $first_name = "Jane";
+            $last_name = "Doe";
+            $new_patron2 = new Patron($first_name, $last_name);
+            $new_patron2->save();
+
+            $new_patron->delete();
+            $result = Patron::getAll();
+
+            $this->assertEquals($new_patron2, $result[0]);
+        }
 
 
 
