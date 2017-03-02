@@ -83,6 +83,24 @@
             $GLOBALS['DB']->exec("DELETE FROM patrons;");
         }
 
+        static function find($search_id)
+        {
+            $query = $GLOBALS['DB']->query("SELECT * FROM patrons WHERE id = {$search_id};");
+            $rs = $query->fetchAll(PDO::FETCH_ASSOC);
+            $first_name_id = $rs[0]['first_name_id'];
+            $last_name_id = $rs[0]['last_name_id'];
+
+            $query = $GLOBALS['DB']->query("SELECT first_name FROM first_names WHERE id = {$first_name_id};");
+            $rs = $query->fetchAll(PDO::FETCH_ASSOC);
+            $first_name = $rs[0]['first_name'];
+
+            $query = $GLOBALS['DB']->query("SELECT last_name FROM last_names WHERE id = {$last_name_id};");
+            $rs = $query->fetchAll(PDO::FETCH_ASSOC);
+            $last_name = $rs[0]['last_name'];
+
+            return $new_patron = new Patron($first_name, $last_name, $search_id);
+        }
+
 
     }
 

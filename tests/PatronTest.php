@@ -36,6 +36,23 @@
             $this->assertEquals([$new_patron], $result);
         }
 
+        function test_find()
+        {
+            $first_name = "Bob";
+            $last_name = "Smith";
+            $new_patron = new Patron($first_name, $last_name);
+            $new_patron->save();
+
+            $first_name = "Jane";
+            $last_name = "Doe";
+            $new_patron2 = new Patron($first_name, $last_name);
+            $new_patron2->save();
+
+            $result = Patron::find($new_patron2->getId());
+
+            $this->assertEquals($new_patron2, $result);
+        }
+
 
 
 
