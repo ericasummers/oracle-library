@@ -23,7 +23,7 @@
         $library_id = $_POST['libraries_list'];
         $new_library = Library::find($library_id);
 
-        return $app['twig']->render('library.html.twig', array('patrons'=>$new_library->getLibraryPatrons(), 'books'=>$new_library->getLibraryBooks(), 'library' => $new_library, 'libraries'=>Library::getAll()));
+        return $app['twig']->render('library.html.twig', array('patrons'=>$new_library->getLibraryPatrons(), 'books'=>$new_library->getLibraryBooks(), 'library' => $new_library, 'libraries'=>Library::getAll(), 'overdue_books'=>$new_library->getOverdueBooks()));
     });
 
     $app->post("/add_library", function() use ($app){
@@ -37,7 +37,7 @@
     $app->get("/libraries/{id}", function($id) use ($app){
         $new_library = Library::find($id);
 
-        return $app['twig']->render('library.html.twig', array('patrons'=>$new_library->getLibraryPatrons(), 'books'=>$new_library->getLibraryBooks(), 'library' => $new_library, 'libraries'=>Library::getAll()));
+        return $app['twig']->render('library.html.twig', array('patrons'=>$new_library->getLibraryPatrons(), 'books'=>$new_library->getLibraryBooks(), 'library' => $new_library, 'libraries'=>Library::getAll(), 'overdue_books'=>$new_library->getOverdueBooks()));
     });
 
     $app->post("/add_patron", function() use ($app){
@@ -49,7 +49,7 @@
         $new_library = Library::find($_POST['library_id']);
         $new_library->addPatron($new_patron);
 
-        return $app['twig']->render('library.html.twig', array('library'=>$new_library, 'books'=>$new_library->getLibraryBooks(), 'patrons'=>$new_library->getLibraryPatrons(), 'libraries'=>Library::getAll()));
+        return $app['twig']->render('library.html.twig', array('library'=>$new_library, 'books'=>$new_library->getLibraryBooks(), 'patrons'=>$new_library->getLibraryPatrons(), 'libraries'=>Library::getAll(), 'overdue_books'=>$new_library->getOverdueBooks()));
     });
 
     $app->post("/add_book", function() use ($app){
@@ -67,7 +67,7 @@
         $new_library = Library::find($_POST['library_id']);
         $new_library->addBook($new_book);
 
-        return $app['twig']->render('library.html.twig', array('library'=>$new_library, 'books'=>$new_library->getLibraryBooks(), 'patrons'=>$new_library->getLibraryPatrons(), 'libraries'=>Library::getAll()));
+        return $app['twig']->render('library.html.twig', array('library'=>$new_library, 'books'=>$new_library->getLibraryBooks(), 'patrons'=>$new_library->getLibraryPatrons(), 'libraries'=>Library::getAll(), 'overdue_books'=>$new_library->getOverdueBooks()));
     });
 
     $app->get("/patrons/{library_id}/{id}", function($library_id, $id) use ($app){
