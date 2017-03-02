@@ -19,21 +19,14 @@
         return $app['twig']->render('index.html.twig', array('libraries'=>Library::getAll()));
     });
 
-    $app->get("/add_book", function() use ($app){
-        return $app['twig']->render('add_book.html.twig', array('libraries'=>Library::getAll(), 'books'=>Book::getAll()));
+    $app->post("/view_libraries", function() use ($app){
+        $library_id = $_POST['libraries_list'];
+        $new_library = Library::find($library_id);
+
+        return $app['twig']->render('library.html.twig', array('patrons'=>$new_library->getLibraryPatrons(), 'books'=>$new_library->getLibraryBooks(), 'library' => $new_library, 'libraries'=>Library::getAll()));
     });
 
-    $app->get("/add_patron", function() use ($app){
-        return $app['twig']->render('add_patron.html.twig', array('libraries'=>Library::getAll(), 'books'=>Book::getAll()));
-    });
 
-    $app->get("/add_library", function() use ($app){
-        return $app['twig']->render('add_library.html.twig', array('libraries'=>Library::getAll(), 'books'=>Book::getAll()));
-    });
-
-    $app->get("/view_libraries", function() use ($app){
-
-    });
 
     $app->post("/add_library", function() use ($app){
         $library_name = $_POST['name'];
@@ -46,7 +39,7 @@
     $app->get("/libraries/{id}", function($id) use ($app){
         $new_library = Library::find($id);
 
-        return $app['twig']->render('library.html.twig', array('patrons'=>$new_library->getLibraryPatrons(), 'books'=>$new_library->getLibraryBooks(), 'library' => $new_library));
+        return $app['twig']->render('library.html.twig', array('patrons'=>$new_library->getLibraryPatrons(), 'books'=>$new_library->getLibraryBooks(), 'library' => $new_library, 'libraries'=>Library::getAll()));
     });
 
     $app->get("/books/{id}", function($id) use ($app){
