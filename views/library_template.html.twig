@@ -14,8 +14,10 @@
                         <a class="navbar-brand" href="/">Oracle</a>
                     </div>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/addBook">Add a Book</a></li>
-                        <li><a href="/addPatron">Add a Patron</a></li>
+                        <li><a href="/add_book">Add a Book</a></li>
+                        <li><a href="/add_patron">Add a Patron</a></li>
+                        <li><a href="/add_library">Add a Library</a></li>
+                        <li><a href="/view_libraries">Libraries</a></li>
                     </ul>
                 </div>
             </nav>
@@ -33,7 +35,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-7">
+                <div class="col-lg-2">
+                    {% block middleform %}
+                    <h2>Empty form</h2>
+                    {% endblock %}
+                </div>
+                <div class="col-lg-5">
                     <div class="panel">
                         <div class="panel-body">
                             {% block rightblock %}
