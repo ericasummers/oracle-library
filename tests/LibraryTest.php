@@ -117,6 +117,31 @@
             $this->assertEquals([$new_patron, $new_patron2], $result);
         }
 
+        function test_deletPatron()
+        {
+            $name = "Portland Library";
+            $new_library = new Library($name);
+            $new_library->save();
+
+            $first_name = "Bob";
+            $last_name = "Smith";
+            $new_patron = new Patron($first_name, $last_name);
+            $new_patron->save();
+
+            $first_name = "Jane";
+            $last_name = "Doe";
+            $new_patron2 = new Patron($first_name, $last_name);
+            $new_patron2->save();
+
+            $new_library->addPatron($new_patron);
+            $new_library->addPatron($new_patron2);
+
+            $new_library->deletePatron($new_patron);
+            $result = $new_library->getLibraryPatrons();
+
+            $this->assertEquals([$new_patron2], $result);
+        }
+
 
 
 

@@ -103,8 +103,6 @@
         function deleteBook($book_object)
         {
             $GLOBALS['DB']->exec("DELETE FROM library_books WHERE book_id = {$book_object->getId()};");
-
-
         }
 
         function addPatron($new_patron)
@@ -121,11 +119,15 @@
             $library_patrons = array();
             foreach($returned_patron_ids as $id) {
                 $patron_id = $id['patron_id'];
-                echo "ID EQUALS: " . $patron_id;
                 $new_patron = Patron::find($patron_id);
                 array_push($library_patrons, $new_patron);
             }
             return $library_patrons;
+        }
+
+        function deletePatron($patron)
+        {
+            $GLOBALS['DB']->exec("DELETE FROM libraries_patrons WHERE patron_id = {$patron->getId()};");
         }
 
 
