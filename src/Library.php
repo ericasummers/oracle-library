@@ -139,6 +139,18 @@
             $GLOBALS['DB']->exec("UPDATE library_books SET status =null, checkout_patron_id = null, checkout_date = null, due_date = null WHERE book_id = {$book->getId()} AND checkout_patron_id = {$patron->getId()} AND library_id = {$this->getId()} LIMIT 1;");
         }
 
+        static function find($search_id)
+        {
+            $found_library = null;
+            $query = $GLOBALS['DB']->query("SELECT * FROM libraries where id = {$search_id};");
+            $rs = $query->fetchAll(PDO::FETCH_ASSOC);
+            $name = $rs[0]['name'];
+            if ($name) {
+                $found_library= new Library($name, $search_id);
+            }
+            return $found_library;
+        }
+
 
     }
 
